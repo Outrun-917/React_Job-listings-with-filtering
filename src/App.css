@@ -35,8 +35,24 @@
 
 .card {
   padding: 2em;
+  background-color: #ffffff;
+  margin-top: 16px;
+  color: #2b3939;
 }
 
 .read-the-docs {
   color: #888;
 }
+
+.badge {
+  padding: 8px 16px;
+}
+
+.badge-primary {
+  background-color: tan;
+}
+
+.badge-secondary {
+  background-color: tomato;
+}
+

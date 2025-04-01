@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
@@ -6,7 +6,33 @@ import './App.css'
 import Title from "./components/Title"
 import Image from "./components/Image"
 
+import Card from "./components/Card"
+import ProfilePicture from "./components/ProfilePicture"
+import CompanyName from "./components/CompanyName"
+import JobTitle from "./components/JobTitle"
+import ProfileInfo from "./components/ProfileInfo"
+
+import Tag from "./components/Tag"
+import Badge from "./components/Badge"
+import JobDetails from "./components/JobDetails"
+
 function App() {
+  const [userData, setUserData] = useState([])
+
+  useEffect(() => {
+    async function getData() {
+      const res = await fetch("../data.json")
+      const data = await res.json()
+
+      setUserData(data)
+    }
+
+    getData()
+  }, [])
+
+  console.log(userData)
+
+
   const users = [
     {
       id: 1,
@@ -33,11 +59,39 @@ function App() {
   return (
     <>
       {
-        users.map(user => (
-          <div key={user.id}>
-            <Image imgSrc={user.name} imgSrc={user.picture} />
-            <Title name={user.name} />
-          </div>
+        userData.map(user => (
+          <Card key={user.id}>
+            <ProfilePicture profilePicture={user.logo} name={user.company} />
+            <CompanyName name={user.company} />
+            {
+              user.new && (
+                <Badge content="new" type="primary" />
+              )
+            }
+            {
+              user.featured && (
+                <Badge content="featured" />
+              )
+            }
+            <JobTitle jobTitle={user.position} />
+            {/* <ProfileInfo date={user.postedAt} workTime={user.contract} location={user.location} /> */}
+            <ul>
+              <li>
+                <JobDetails content={user.postedAt} />
+                -
+                <JobDetails content={user.contract} />
+                -
+                <JobDetails content={user.location} />
+              </li>
+            </ul>
+            {
+              [...user.languages, ...user.tools].map(tag => (
+                <li>
+                  <Tag key={tag} name={tag} />
+                </li>
+              ))
+            }
+          </Card>
         ))
       }
     </>
